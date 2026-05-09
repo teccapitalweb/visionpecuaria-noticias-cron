@@ -26,53 +26,51 @@ const CATEGORIAS = [
   {
     id: 'bovinos',
     queries: [
-      'ganadería bovina México',
-      'precio becerro',
-      'producción láctea',
-      'carne de res'
+      'ganado bovino',
+      'becerro precio',
+      'leche produccion',
+      'carne res mexico'
     ]
   },
   {
     id: 'porcinos',
     queries: [
-      'porcicultura México',
-      'precio cerdo',
-      'carne de cerdo exportación'
+      'porcicultura',
+      'carne cerdo',
+      'cerdo precio'
     ]
   },
   {
     id: 'avicola',
     queries: [
-      'avicultura México',
-      'precio pollo',
-      'producción huevo'
+      'avicultura',
+      'pollo produccion',
+      'huevo precio'
     ]
   },
   {
     id: 'mercados',
     queries: [
-      'SADER pecuario',
-      'precio ganado México',
-      'exportación carne México',
-      'SNIIM precios'
+      'SADER ganaderia',
+      'precio ganado',
+      'exportacion carne'
     ]
   }
 ];
 
 // ─── Fetch a NewsData.io ───
 async function fetchNoticias(query) {
-  const url = new URL('https://newsdata.io/api/1/news');
+  const url = new URL('https://newsdata.io/api/1/latest');
   url.searchParams.set('apikey', NEWSDATA_KEY);
   url.searchParams.set('q', query);
   url.searchParams.set('language', 'es');
-  url.searchParams.set('country', 'mx,ar,co,cl,pe,es');
-  url.searchParams.set('image', '1');
   url.searchParams.set('size', '10');
 
   try {
     const r = await fetch(url.toString());
     if (!r.ok) {
-      console.warn(`[NewsData] HTTP ${r.status} para query: ${query}`);
+      const txt = await r.text();
+      console.warn(`[NewsData] HTTP ${r.status} para query "${query}": ${txt.substring(0,200)}`);
       return [];
     }
     const data = await r.json();
